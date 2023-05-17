@@ -1,0 +1,457 @@
+Programação de computadores II - 2023.2
+Resolução da Lista 8
+Relatório em formato txt contendo minha solução da lista 8, contendo códigos fonte e output da execução dos programas
+Aluno: Artur Henrique Teixeira do Amaral
+DRE: 122032113
+Data: 17/05/2023
+
+###############
+# Exercício 1 #
+###############
+
+Código fonte
+---
+
+#include <stdio.h>
+
+typedef struct _PONTO {
+    float x , y ;
+} PONTO ;
+
+int main ( void ) 
+{
+    PONTO p ;
+
+    printf("Entre com as coordenadas do ponto p:\n");
+    scanf("%f %f", &p.x, &p.y);
+    
+    printf("Dados lidos:\n");
+    printf("Ponto p: x = %f, y = %f\n", p.x, p.y);
+
+    return 0;
+}
+
+Output
+---
+
+metta@metta-dell ~/git/prog2/lista8/1 (main) $ ./a.out 
+Entre com as coordenadas do ponto p:
+3.4
+1.2
+Dados lidos:
+Ponto p: x = 3.400000, y = 1.200000
+metta@metta-dell ~/git/prog2/lista8/1 (main) $ ./a.out 
+Entre com as coordenadas do ponto p:
+-3 -40.1
+Dados lidos:
+Ponto p: x = -3.000000, y = -40.099998
+metta@metta-dell ~/git/prog2/lista8/1 (main) $ ./a.out 
+Entre com as coordenadas do ponto p:
+1.1113 1.2
+Dados lidos:
+Ponto p: x = 1.111300, y = 1.200000
+
+
+###############
+# Exercício 2 #
+###############
+
+* Código fonte:
+
+#include <stdio.h>
+
+typedef struct _PONTO {
+    float x, y;
+} PONTO;
+
+typedef struct _CIRCUNFERENCIA {
+    float raio;
+    PONTO centro;
+} CIRCUNFERENCIA;
+
+int main(void)
+{
+    CIRCUNFERENCIA c1;
+
+    printf("Entre com o raio do circulo c1:\n");
+    scanf("%f", &c1.raio);
+    printf("Entre com as coordenadas do centro do circulo c2:\n");
+    scanf("%f %f", &c1.centro.x, &c1.centro.y);
+
+    printf("Dados lidos:\n");
+    printf("Circulo c1: raio = %f, x = %f, y = %f\n", c1.raio, c1.centro.x, c1.centro.y);
+
+    return 0;
+}
+
+* Output
+
+metta@metta-dell ~/git/prog2/lista8/2 (main) $ ./a.out 
+Entre com o raio do circulo c1:
+3.5
+Entre com as coordenadas do centro do circulo c2:
+1 4
+Dados lidos:
+Circulo c1: raio = 3.500000, x = 1.000000, y = 4.000000
+metta@metta-dell ~/git/prog2/lista8/2 (main) $ ./a.out 
+Entre com o raio do circulo c1:
+45.5
+Entre com as coordenadas do centro do circulo c2:
+0 0 
+Dados lidos:
+Circulo c1: raio = 45.500000, x = 0.000000, y = 0.000000
+metta@metta-dell ~/git/prog2/lista8/2 (main) $ ./a.out 
+Entre com o raio do circulo c1:
+12.3339
+Entre com as coordenadas do centro do circulo c2:
+-1.1 -2.5
+Dados lidos:
+Circulo c1: raio = 12.333900, x = -1.100000, y = -2.500000
+
+
+###############
+# Exercício 3 #
+###############
+
+* Código fonte:
+
+#include <stdio.h>
+#include <math.h>
+
+typedef struct _PONTO {
+    float x , y ;
+} PONTO ;
+
+int main ( void ) 
+{
+    PONTO p1, p2 ;
+    float distancia;
+
+    printf("Entre com as coordenadas do ponto p1:\n");
+    scanf("%f %f", &p1.x, &p1.y);
+    
+    printf("Entre com as coordenadas do ponto p2:\n");
+    scanf("%f %f", &p2.x, &p2.y);
+
+    distancia = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2));
+    
+    printf("Distancia entre os pontos:\n%f\n\n", distancia);
+
+    return 0;
+}
+
+* Output
+
+metta@metta-dell ~/git/prog2/lista8/3 (main) $ ./a.out 
+Entre com as coordenadas do ponto p1:
+1 1
+Entre com as coordenadas do ponto p2:
+2 2
+Distancia entre os pontos:
+1.414214
+
+metta@metta-dell ~/git/prog2/lista8/3 (main) $ ./a.out 
+Entre com as coordenadas do ponto p1:
+0 0 
+Entre com as coordenadas do ponto p2:
+0 0
+Distancia entre os pontos:
+0.000000
+
+metta@metta-dell ~/git/prog2/lista8/3 (main) $ ./a.out 
+Entre com as coordenadas do ponto p1:
+0 0
+Entre com as coordenadas do ponto p2:
+15 15
+Distancia entre os pontos:
+21.213203
+
+metta@metta-dell ~/git/prog2/lista8/3 (main) $ ./a.out 
+Entre com as coordenadas do ponto p1:
+0 1
+Entre com as coordenadas do ponto p2:
+-12 2
+Distancia entre os pontos:
+12.041595
+
+metta@metta-dell ~/git/prog2/lista8/3 (main) $ ./a.out 
+Entre com as coordenadas do ponto p1:
+3 3
+Entre com as coordenadas do ponto p2:
+3 9
+Distancia entre os pontos:
+6.000000
+
+
+###############
+# Exercício 4 #
+###############
+
+* Código fonte:
+
+#include <stdio.h>
+#include <math.h>
+
+typedef struct _PONTO {
+    float x, y;
+} PONTO;
+
+typedef struct _CIRCUNFERENCIA {
+    float raio;
+    PONTO centro;
+} CIRCUNFERENCIA;
+
+int main(void)
+{
+    CIRCUNFERENCIA c;
+    PONTO p;
+
+    float distancia;
+
+    printf("Entre com as coordenadas do ponto p:\n");
+    scanf("%f %f", &p.x, &p.y);
+
+    printf("Entre com as coordenadas do centro do circulo:\n");
+    scanf("%f %f", &c.centro.x, &c.centro.y);
+
+    printf("Entre com o raio do circulo:\n");
+    scanf("%f", &c.raio);
+
+    distancia = sqrt(pow(p.x - c.centro.x, 2) + pow(p.y - c.centro.y, 2));
+
+    if (distancia < c.raio)
+    {
+        printf("O ponto esta contido dentro da circunferencia.\n");
+    } 
+    else 
+    {
+        printf("O ponto nao esta contido dentro da circunferencia.\n");
+    }
+
+    return 0;
+}
+
+* Output
+
+metta@metta-dell ~/git/prog2/lista8/4 (main) $ ./a.out 
+Entre com as coordenadas do ponto p:
+0 0
+Entre com as coordenadas do centro do circulo:
+0 0
+Entre com o raio do circulo:
+3
+O ponto esta contido dentro da circunferencia.
+metta@metta-dell ~/git/prog2/lista8/4 (main) $ ./a.out 
+Entre com as coordenadas do ponto p:
+5 5
+Entre com as coordenadas do centro do circulo:
+0 0
+Entre com o raio do circulo:
+3
+O ponto nao esta contido dentro da circunferencia.
+metta@metta-dell ~/git/prog2/lista8/4 (main) $ ./a.out 
+Entre com as coordenadas do ponto p:
+5 5
+Entre com as coordenadas do centro do circulo:
+0 0
+Entre com o raio do circulo:
+6
+O ponto nao esta contido dentro da circunferencia.
+metta@metta-dell ~/git/prog2/lista8/4 (main) $ ./a.out 
+Entre com as coordenadas do ponto p:
+5 5
+Entre com as coordenadas do centro do circulo:
+0 0
+Entre com o raio do circulo:
+7
+O ponto nao esta contido dentro da circunferencia.
+metta@metta-dell ~/git/prog2/lista8/4 (main) $ ./a.out 
+Entre com as coordenadas do ponto p:
+5 5
+Entre com as coordenadas do centro do circulo:
+0 0
+Entre com o raio do circulo:
+7.1
+O ponto esta contido dentro da circunferencia.
+
+
+###############
+# Exercício 5 #
+###############
+
+* Código fonte:
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef
+struct _TEMPO {
+    int hora, minuto, segundo;
+} TEMPO;
+
+int main(void)
+{
+    TEMPO t1, t2;
+
+    /*O padrao para essa variavel sera o seguinte:
+    maior = 1 caso t1 seja maior
+    maior = -1 caso t2 seja maior
+    maior = 0 caso t1 seja igual a t2
+    */
+    short maior;
+
+    printf("Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:\n");
+    scanf("%i %i %i", &t1.hora, &t1.minuto, &t1.segundo);
+
+    if (t1.minuto < 0 || t1.minuto >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    if (t1.segundo < 0 || t1.segundo >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    printf("Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:\n");
+    scanf("%i %i %i", &t2.hora, &t2.minuto, &t2.segundo);
+
+    if (t2.minuto < 0 || t2.minuto >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    if (t2.segundo < 0 || t2.segundo >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    if (t1.hora > t2.hora)
+    {
+        maior = 1;
+    }
+    else if (t1.hora < t2.hora)
+    {
+        maior = -1;
+    }
+    else 
+    {
+        if (t1.minuto > t2.minuto)
+        {
+            maior = 1;
+        }
+        else if (t1.minuto < t2.minuto)
+        {
+            maior = -1;
+        }
+        else 
+        {
+            if (t1.segundo > t2.segundo)
+            {
+                maior = 1;
+            }
+            else if (t1.segundo < t2.segundo)
+            {
+                maior = -1;
+            }
+            else 
+            {
+                maior = 0;
+            }
+        }
+    }
+
+
+    if (maior == 1)
+    {
+        printf("\nA primeira tarefa foi mais longa, durando %ih %im %is\n\n", t1.hora, t1.minuto, t1.segundo);
+    }
+    else if (maior == -1)
+    {
+        printf("\nA segunda tarefa foi mais longa, durando %ih %im %is\n\n", t2.hora, t2.minuto, t2.segundo);
+    } 
+    else if (maior == 0)
+    {
+        printf("\nAs tarefas demoraram o mesmo tempo, durando %ih %im %is\n\n", t1.hora, t1.minuto, t1.segundo);
+    }
+
+    return 0;
+}
+
+* Output
+
+metta@metta-dell ~/git/prog2/lista8/5 (main) $ ./a.out 
+Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:
+2 12 34
+Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:
+2 15 30
+
+A segunda tarefa foi mais longa, durando 2h 15m 30s
+
+metta@metta-dell ~/git/prog2/lista8/5 (main) $ ./a.out 
+Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:
+2 3 45
+Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:
+2 3 45
+
+As tarefas demoraram o mesmo tempo, durando 2h 3m 45s
+
+metta@metta-dell ~/git/prog2/lista8/5 (main) $ ./a.out 
+Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:
+2 0 12
+Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:
+2 0 0
+
+A primeira tarefa foi mais longa, durando 2h 0m 12s
+
+
+
+###############
+# Exercício 6 #
+###############
+
+* Código fonte:
+
+
+
+* Output
+
+
+
+###############
+# Exercício 7 #
+###############
+
+* Código fonte:
+
+
+
+* Output
+
+
+
+###############
+# Exercício 3 #
+###############
+
+* Código fonte:
+
+
+
+* Output
+
+
+
+###############
+# Exercício 3 #
+###############
+
+* Código fonte:
+
+
+
+* Output
