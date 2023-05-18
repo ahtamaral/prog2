@@ -408,17 +408,113 @@ Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:
 
 A primeira tarefa foi mais longa, durando 2h 0m 12s
 
-
-
 ###############
 # Exercício 6 #
 ###############
 
 * Código fonte:
 
+#include <stdio.h>
+#include <stdlib.h>
 
+typedef
+struct _TEMPO {
+    int hora, minuto, segundo;
+} TEMPO;
+
+int main(void)
+{
+    TEMPO t1, t2, t3;
+    unsigned short aux;
+
+    printf("Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:\n");
+    scanf("%i %i %i", &t1.hora, &t1.minuto, &t1.segundo);
+
+    if (t1.minuto < 0 || t1.minuto >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    if (t1.segundo < 0 || t1.segundo >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    printf("Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:\n");
+    scanf("%i %i %i", &t2.hora, &t2.minuto, &t2.segundo);
+
+    if (t2.minuto < 0 || t2.minuto >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    if (t2.segundo < 0 || t2.segundo >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    t3.segundo = t1.segundo + t2.segundo;
+    t3.minuto = 0;
+    t3.hora = 0;
+
+    if (t3.segundo >= 60)
+    {
+        t3.segundo = (t1.segundo + t2.segundo) % 60;
+        t3.minuto += (t1.segundo + t2.segundo) / 60;
+    }
+
+    aux = t1.minuto + t2.minuto;
+
+    if (aux >= 60)
+    {
+        t3.minuto += aux % 60;
+        t3.hora += aux / 60;
+    }
+
+    t3.hora += t1.hora + t2.hora;
+
+    printf("Tempo total dispendido:\n%ih %im %is\n\n", t3.hora, t3.minuto, t3.segundo);
+
+    return 0;
+}
 
 * Output
+
+metta@metta-dell ~/git/prog2/lista8/6 (main) $ ./a.out 
+Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:
+1 0 0
+Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:
+1 0 0
+Tempo total dispendido:
+2h 0m 0s
+
+metta@metta-dell ~/git/prog2/lista8/6 (main) $ ./a.out 
+Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:
+1 0 40
+Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:
+1 0 3 
+Tempo total dispendido:
+2h 0m 43s
+
+metta@metta-dell ~/git/prog2/lista8/6 (main) $ ./a.out 
+Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:
+1 0 40 
+Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:
+1 0 20
+Tempo total dispendido:
+2h 1m 0s
+
+metta@metta-dell ~/git/prog2/lista8/6 (main) $ ./a.out 
+Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:
+1 45 0
+Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:
+2 25 0
+Tempo total dispendido:
+4h 10m 0s
 
 
 
@@ -428,30 +524,685 @@ A primeira tarefa foi mais longa, durando 2h 0m 12s
 
 * Código fonte:
 
+#include <stdio.h>
+#include <stdlib.h>
 
+typedef
+struct _TEMPO {
+    int hora, minuto, segundo;
+} TEMPO;
+
+int comparaTempo(TEMPO t1, TEMPO t2)
+{
+    if (t1.hora > t2.hora)
+        return 1;
+    else if (t1.hora < t2.hora)
+        return -1;
+    else 
+        if (t1.minuto > t2.minuto)
+            return 1;
+        else if (t1.minuto < t2.minuto)
+            return -1;
+        else 
+            if (t1.segundo > t2.segundo)
+                return 1;
+            else if (t1.segundo < t2.segundo)
+                return -1;
+            else 
+                return 0;
+}
+
+int main(void)
+{
+    TEMPO t1, t2;
+    unsigned short rc;
+
+
+    printf("Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:\n");
+    scanf("%i %i %i", &t1.hora, &t1.minuto, &t1.segundo);
+
+    if (t1.minuto < 0 || t1.minuto >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    if (t1.segundo < 0 || t1.segundo >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    printf("Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:\n");
+    scanf("%i %i %i", &t2.hora, &t2.minuto, &t2.segundo);
+
+    if (t2.minuto < 0 || t2.minuto >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    if (t2.segundo < 0 || t2.segundo >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        exit(1);
+    }
+
+    rc = comparaTempo(t1, t2);
+
+    if (rc > 0)
+    {
+        printf("\nA primeira tarefa foi mais longa, durando %ih %im %is\n\n", t1.hora, t1.minuto, t1.segundo);
+    }
+    else if (rc < -1)
+    {
+        printf("\nA segunda tarefa foi mais longa, durando %ih %im %is\n\n", t2.hora, t2.minuto, t2.segundo);
+    } 
+    else if (rc == 0)
+    {
+        printf("\nAs tarefas demoraram o mesmo tempo, durando %ih %im %is\n\n", t1.hora, t1.minuto, t1.segundo);
+    }
+
+    return 0;
+}
 
 * Output
+
+metta@metta-dell ~/git/prog2/lista8/7 (main) $ ./a.out 
+Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:
+1 0 0
+Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:
+0 0 50
+
+A primeira tarefa foi mais longa, durando 1h 0m 0s
+
+metta@metta-dell ~/git/prog2/lista8/7 (main) $ ./a.out 
+Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:
+2 23 23
+Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:
+2 23 23
+
+As tarefas demoraram o mesmo tempo, durando 2h 23m 23s
+
+metta@metta-dell ~/git/prog2/lista8/7 (main) $ ./a.out 
+Escreva o tempo gasto na primeira tarefa, em horas, minutos e segundos:
+2 15 15
+Escreva o tempo gasto na segunda tarefa, em horas, minutos e segundos:
+2 15 16
+
+A primeira tarefa foi mais longa, durando 2h 15m 15s
 
 
 
 ###############
-# Exercício 3 #
+# Exercício 8 #
 ###############
 
 * Código fonte:
 
+#include <stdio.h>
+#include <stdlib.h>
 
+#define TAMANHO 5
+
+typedef
+struct _TEMPO {
+    int hora, minuto, segundo;
+} TEMPO;
+
+int comparaTempo(TEMPO t1, TEMPO t2)
+{
+    if (t1.hora > t2.hora)
+        return 1;
+    else if (t1.hora < t2.hora)
+        return -1;
+    else 
+        if (t1.minuto > t2.minuto)
+            return 1;
+        else if (t1.minuto < t2.minuto)
+            return -1;
+        else 
+            if (t1.segundo > t2.segundo)
+                return 1;
+            else if (t1.segundo < t2.segundo)
+                return -1;
+            else 
+                return 0;
+}
+
+int leTarefa(TEMPO* t)
+{
+    printf("Escreva o tempo gasto na tarefa, em horas, minutos e segundos:\n");
+    scanf("%i %i %i", &t->hora, &t->minuto, &t->segundo);
+
+    if (t->minuto < 0 || t->minuto >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        return 0;
+    }
+
+    if (t->segundo < 0 || t->segundo >= 60)
+    {
+        printf("Tempo inserido invalido. Abortando.\n");
+        return 0;
+    }
+
+    return 1;
+}
+
+int main(void)
+{
+    TEMPO t1, t2, t3, t4, t5;
+    TEMPO tAux;
+    TEMPO tarefas[TAMANHO];
+
+    if (!leTarefa(&t1)) exit(1);
+    if (!leTarefa(&t2)) exit(1);
+    if (!leTarefa(&t3)) exit(1);
+    if (!leTarefa(&t4)) exit(1);
+    if (!leTarefa(&t5)) exit(1);
+
+    tarefas[0] = t1;
+    tarefas[1] = t2;
+    tarefas[2] = t3;
+    tarefas[3] = t4;
+    tarefas[4] = t5;
+
+    for (int i = 0; i < TAMANHO - 1; i++) 
+    {
+        for (int j = 0; j < TAMANHO - i - 1; j++) 
+        {
+            if (comparaTempo(tarefas[j], tarefas[j+1]) > 0)
+            {
+                tAux = tarefas[j];
+                tarefas[j] = tarefas[j + 1];
+                tarefas[j + 1] = tAux;
+            }
+        }
+    }
+
+    puts("Tarefas ordenadas de forma crescente:\n");
+    for (int i = 0; i < TAMANHO; i++) 
+        printf("%ih %im %is\n", tarefas[i].hora, tarefas[i].minuto, tarefas[i].segundo);
+    
+
+    return 0;
+}
 
 * Output
 
+metta@metta-dell ~/git/prog2/lista8/8 (main) $ ./a.out 
+Escreva o tempo gasto na tarefa, em horas, minutos e segundos:
+1 0 0
+Escreva o tempo gasto na tarefa, em horas, minutos e segundos:
+4 0 0
+Escreva o tempo gasto na tarefa, em horas, minutos e segundos:
+5 0 0
+Escreva o tempo gasto na tarefa, em horas, minutos e segundos:
+3 0 0
+Escreva o tempo gasto na tarefa, em horas, minutos e segundos:
+2 0 0
+Tarefas ordenadas de forma crescente:
 
+1h 0m 0s
+2h 0m 0s
+3h 0m 0s
+4h 0m 0s
+5h 0m 0s
+metta@metta-dell ~/git/prog2/lista8/8 (main) $ gcc main.c
+metta@metta-dell ~/git/prog2/lista8/8 (main) $ ./a.out 
+Escreva o tempo gasto na tarefa, em horas, minutos e segundos:
+2 0 0  
+Escreva o tempo gasto na tarefa, em horas, minutos e segundos:
+1 59 59
+Escreva o tempo gasto na tarefa, em horas, minutos e segundos:
+4 14 0
+Escreva o tempo gasto na tarefa, em horas, minutos e segundos:
+0 15 0
+Escreva o tempo gasto na tarefa, em horas, minutos e segundos:
+1 30 0
+Tarefas ordenadas de forma crescente:
+
+0h 15m 0s
+1h 30m 0s
+1h 59m 59s
+2h 0m 0s
+4h 14m 0s
 
 ###############
-# Exercício 3 #
+# Exercício 10 #
 ###############
 
 * Código fonte:
 
+#include <stdio.h>
+#include <stdlib.h>
 
+typedef struct _JOGADOR {
+    int pontos;
+    char nome[42];
+} JOGADOR;
+
+void leJogador(JOGADOR* j)
+{
+    puts("Insira o nome do jogador: ");
+    scanf("%s", j->nome);
+    puts("Insira a quantidade de pontos do jogador:");
+    scanf("%d", &j->pontos);
+}
+
+int main(void)
+{
+
+    JOGADOR j;
+    JOGADOR jogadores[5];
+
+    for (int i = 0; i < 5; i++)
+    {
+        leJogador(&j);
+        jogadores[i] = j;
+    }
+
+    for (int i = 0; i < 5; i++)
+    {
+        printf("%s: %d pontos\n", jogadores[i].nome, jogadores[i].pontos);
+    }
+    
+    return 0;
+}
 
 * Output
+
+metta@metta-dell ~/git/prog2/lista8/10 (main) $ ./a.out 
+Insira o nome do jogador: 
+Artur 
+Insira a quantidade de pontos do jogador:
+23
+Insira o nome do jogador: 
+Bruno
+Insira a quantidade de pontos do jogador:
+21
+Insira o nome do jogador: 
+Carlos
+Insira a quantidade de pontos do jogador:
+14
+Insira o nome do jogador: 
+Gabriel
+Insira a quantidade de pontos do jogador:
+10
+Insira o nome do jogador: 
+Bernardo
+Insira a quantidade de pontos do jogador:
+19
+Artur: 23 pontos
+Bruno: 21 pontos
+Carlos: 14 pontos
+Gabriel: 10 pontos
+Bernardo: 19 pontos
+
+
+###############
+# Exercício 11 #
+###############
+
+* Código fonte:
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TAMANHO 5
+
+typedef struct _JOGADOR {
+    int pontos;
+    char nome[42];
+} JOGADOR;
+
+void leJogador(JOGADOR* j)
+{
+    puts("Insira o nome do jogador: ");
+    scanf("%s", j->nome);
+    puts("Insira a quantidade de pontos do jogador:");
+    scanf("%d", &j->pontos);
+}
+
+int main(void)
+{
+
+    JOGADOR j;
+    JOGADOR jogadores[5];
+    JOGADOR jAux;
+
+    for (int i = 0; i < 5; i++)
+    {
+        leJogador(&j);
+        jogadores[i] = j;
+    }
+
+    for (int i = 0; i < TAMANHO - 1; i++) 
+    {
+        for (int j = 0; j < TAMANHO - i - 1; j++) 
+        {
+            if (jogadores[j].pontos > jogadores[j+1].pontos)
+            {
+                jAux = jogadores[j];
+                jogadores[j] = jogadores[j + 1];
+                jogadores[j + 1] = jAux;
+            }
+        }
+    }
+
+    
+    for (int i = 4; i >= 0; i--)
+    {
+        printf("%s: %d pontos\n", jogadores[i].nome, jogadores[i].pontos);
+    }
+
+    return 0;
+}
+
+* Output
+
+metta@metta-dell ~/git/prog2/lista8/11 (main) $ ./a.out 
+Insira o nome do jogador: 
+Artur
+Insira a quantidade de pontos do jogador:
+23
+Insira o nome do jogador: 
+Bruno
+Insira a quantidade de pontos do jogador:
+21
+Insira o nome do jogador: 
+CArlos
+Insira a quantidade de pontos do jogador:
+14
+Insira o nome do jogador: 
+Gabriel
+Insira a quantidade de pontos do jogador:
+10
+Insira o nome do jogador: 
+Bernardo
+Insira a quantidade de pontos do jogador:
+19
+Artur: 23 pontos
+Bruno: 21 pontos
+Bernardo: 19 pontos
+CArlos: 14 pontos
+Gabriel: 10 pontos
+
+
+###############
+# Exercício 12 #
+###############
+
+* Código fonte:
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TAMANHO 5
+
+typedef struct _JOGADOR {
+    int pontos;
+    char nome[42];
+} JOGADOR;
+
+void leJogador(JOGADOR* j)
+{
+    puts("Insira o nome do jogador: ");
+    scanf("%s", j->nome);
+    puts("Insira a quantidade de pontos do jogador:");
+    scanf("%d", &j->pontos);
+}
+
+int main(void)
+{
+
+    JOGADOR j;
+    JOGADOR jogadores[6];
+    JOGADOR jAux;
+
+    for (int i = 0; i < 5; i++)
+    {
+        leJogador(&j);
+        jogadores[i] = j;
+    }
+
+    for (int i = 0; i < TAMANHO - 1; i++) 
+    {
+        for (int j = 0; j < TAMANHO - i - 1; j++) 
+        {
+            if (jogadores[j].pontos > jogadores[j+1].pontos)
+            {
+                jAux = jogadores[j];
+                jogadores[j] = jogadores[j + 1];
+                jogadores[j + 1] = jAux;
+            }
+        }
+    }
+
+
+    for (int i = 4; i >= 0; i--)
+    {
+        printf("%s: %d pontos\n", jogadores[i].nome, jogadores[i].pontos);
+    }
+
+    leJogador(&j);
+    jogadores[5] = j;
+
+    for (int i = 0; i < TAMANHO+1 - 1; i++) 
+    {
+        for (int j = 0; j < TAMANHO+1 - i - 1; j++) 
+        {
+            if (jogadores[j].pontos > jogadores[j+1].pontos)
+            {
+                jAux = jogadores[j];
+                jogadores[j] = jogadores[j + 1];
+                jogadores[j + 1] = jAux;
+            }
+        }
+    }
+
+    for (int i = 5; i >= 1; i--)
+    {
+        printf("%s: %d pontos\n", jogadores[i].nome, jogadores[i].pontos);
+    }
+
+    return 0;
+}
+
+* Output
+
+metta@metta-dell ~/git/prog2/lista8/12 (main) $ ./a.out 
+Insira o nome do jogador: 
+Artur
+Insira a quantidade de pontos do jogador:
+23
+Insira o nome do jogador: 
+Bruno   
+Insira a quantidade de pontos do jogador:
+19
+Insira o nome do jogador: 
+Bernardo
+Insira a quantidade de pontos do jogador:
+10
+Insira o nome do jogador: 
+Gabriel
+Insira a quantidade de pontos do jogador:
+14
+Insira o nome do jogador: 
+Carlos
+Insira a quantidade de pontos do jogador:
+11
+Artur: 23 pontos
+Bruno: 19 pontos
+Gabriel: 14 pontos
+Carlos: 11 pontos
+Bernardo: 10 pontos
+Insira o nome do jogador: 
+Gustavo
+Insira a quantidade de pontos do jogador:
+20
+Artur: 23 pontos
+Gustavo: 20 pontos
+Bruno: 19 pontos
+Gabriel: 14 pontos
+Carlos: 11 pontos
+
+
+
+###############
+# Exercício 13 #
+###############
+
+* Código fonte:
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct _FRACAO {
+    int numerador; int denominador;
+} FRACAO;
+
+int main(void)
+{
+    FRACAO f1, f2;
+
+    puts("Insira o numerador e o denominador da primeira fracao: ");
+    scanf("%d %d", &f1.numerador, &f1.denominador);
+    
+    if (f1.denominador == 0)
+    {
+        puts("Denominador nulo. Abortando.\n");
+        exit(1);
+    }
+
+    puts("Insira o numerador e o denominador da segunda fracao: ");
+    scanf("%d %d", &f2.numerador, &f2.denominador);
+
+    if (f2.denominador == 0)
+    {
+        puts("Denominador nulo. Abortando.\n");
+        exit(1);
+    }
+
+    printf("SOMA: %d / %d\n", f1.numerador*f2.denominador + f2.numerador*f1.denominador, f1.denominador * f2.denominador);
+    printf("SUBTRACAO: %d / %d\n", f1.numerador*f2.denominador - f2.numerador*f1.denominador, f1.denominador * f2.denominador);
+    printf("PRODUTO: %d / %d\n", f1.numerador * f2.numerador, f1.denominador * f2.denominador);
+    printf("DIVISAO: %d / %d\n", f1.numerador * f2.denominador, f1.denominador * f2.numerador);
+
+    return 0;
+}
+
+* Output
+
+Insira o numerador e o denominador da primeira fracao: 
+4 5
+Insira o numerador e o denominador da segunda fracao: 
+2 5
+SOMA: 30 / 25
+SUBTRACAO: 10 / 25
+PRODUTO: 8 / 25
+DIVISAO: 20 / 10
+metta@metta-dell ~/git/prog2/lista8/13 (main) $ ./a.out 
+Insira o numerador e o denominador da primeira fracao: 
+1 0
+Denominador nulo. Abortando.
+
+metta@metta-dell ~/git/prog2/lista8/13 (main) $ ./a.out 
+Insira o numerador e o denominador da primeira fracao: 
+10 15
+Insira o numerador e o denominador da segunda fracao: 
+15 3
+SOMA: 255 / 45
+SUBTRACAO: -195 / 45
+PRODUTO: 150 / 45
+DIVISAO: 30 / 225
+
+
+###############
+# Exercício 14 #
+###############
+
+* Código fonte:
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct _FRACAO {
+    int numerador; int denominador;
+} FRACAO;
+
+FRACAO soma(FRACAO f1, FRACAO f2) {
+    FRACAO f;
+    f.numerador = f1.numerador*f2.denominador + f2.numerador*f1.denominador;
+    f.denominador = f1.denominador * f2.denominador;
+    return f;
+}
+
+FRACAO subtracao(FRACAO f1, FRACAO f2) {
+    FRACAO f;
+    f.numerador = f1.numerador*f2.denominador - f2.numerador*f1.denominador;
+    f.denominador = f1.denominador * f2.denominador;
+    return f;
+}
+
+FRACAO produto(FRACAO f1, FRACAO f2) {
+    FRACAO f;
+    f.numerador = f1.numerador * f2.numerador;
+    f.denominador = f1.denominador * f2.denominador;
+    return f;
+}
+
+FRACAO divisao(FRACAO f1, FRACAO f2) {
+    FRACAO f;
+    f.numerador = f1.numerador * f2.denominador;
+    f.denominador = f1.denominador * f2.numerador;
+    return f;
+}
+
+
+int main(void)
+{
+    FRACAO f1, f2, fr;
+
+    puts("Insira o numerador e o denominador da primeira fracao: ");
+    scanf("%d %d", &f1.numerador, &f1.denominador);
+    
+    if (f1.denominador == 0)
+    {
+        puts("Denominador nulo. Abortando.\n");
+        exit(1);
+    }
+
+    puts("Insira o numerador e o denominador da segunda fracao: ");
+    scanf("%d %d", &f2.numerador, &f2.denominador);
+
+    if (f2.denominador == 0)
+    {
+        puts("Denominador nulo. Abortando.\n");
+        exit(1);
+    }
+
+    fr = soma(f1, f2);
+    printf("SOMA: %d / %d\n", fr.numerador, fr.denominador);
+    fr = subtracao(f1, f2);
+    printf("SUBTRACAO: %d / %d\n", fr.numerador, fr.denominador);
+    fr = produto(f1, f2);
+    printf("PRODUTO: %d / %d\n", fr.numerador, fr.denominador);
+    fr = divisao(f1, f2);
+    printf("DIVISAO: %d / %d\n", fr.numerador, fr.denominador);
+
+    return 0;
+}
+
+* Output
+
+metta@metta-dell ~/git/prog2/lista8/14 (main) $ ./a.out 
+Insira o numerador e o denominador da primeira fracao: 
+2 3
+Insira o numerador e o denominador da segunda fracao: 
+3 2
+SOMA: 13 / 6
+SUBTRACAO: -5 / 6
+PRODUTO: 6 / 6
+DIVISAO: 4 / 9
