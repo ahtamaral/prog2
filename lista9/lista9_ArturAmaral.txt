@@ -1,0 +1,789 @@
+Programação de computadores II - 2023.2
+Resolução da Lista 9
+Relatório em formato txt contendo minha solução da lista 8, contendo códigos fonte e output da execução dos programas
+Aluno: Artur Henrique Teixeira do Amaral
+DRE: 122032113
+Data: 24/05/2023
+
+###############
+# Exercício 1 #
+###############
+
+Código fonte
+---
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_CONTATOS 100
+#define MAX_NOME 50
+#define MAX_TELEFONE 15
+#define MAX_ANIVERSARIO 15
+#define ARQUIVO_CONTATOS "contatos.csv"
+
+typedef struct {
+    char nome[MAX_NOME];
+    char telefone[MAX_TELEFONE];
+    char aniversario[MAX_ANIVERSARIO];
+} Contato;
+
+Contato agenda[MAX_CONTATOS];
+int numContatos = 0;
+
+void carregarContatos() {
+    FILE *arquivo = fopen(ARQUIVO_CONTATOS, "r");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo de contatos.\n");
+        return;
+    }
+
+    char linha[MAX_NOME + MAX_TELEFONE + MAX_ANIVERSARIO + 3];
+    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+        if (numContatos >= MAX_CONTATOS) {
+            printf("Limite máximo de contatos atingido.\n");
+            break;
+        }
+
+        char *nome = strtok(linha, ",");
+        char *telefone = strtok(NULL, ",");
+        char *aniversario = strtok(NULL, ",");
+
+        strcpy(agenda[numContatos].nome, nome);
+        strcpy(agenda[numContatos].telefone, telefone);
+        strcpy(agenda[numContatos].aniversario, aniversario);
+
+        numContatos++;
+    }
+
+    fclose(arquivo);
+}
+
+void adicionarContato() {
+    if (numContatos >= MAX_CONTATOS) {
+        printf("Limite máximo de contatos atingido.\n");
+        return;
+    }
+
+    Contato novoContato;
+    printf("Digite o nome: ");
+    scanf(" %[^\n]s", novoContato.nome);
+    printf("Digite o telefone: ");
+    scanf(" %[^\n]s", novoContato.telefone);
+    printf("Digite o aniversario: ");
+    scanf(" %[^\n]s", novoContato.aniversario);
+
+    agenda[numContatos] = novoContato;
+    numContatos++;
+}
+
+void removerContato() {
+    char nome[MAX_NOME];
+    printf("Digite o nome do contato a ser removido: ");
+    scanf(" %[^\n]s", nome);
+
+    int i;
+    for (i = 0; i < numContatos; i++) {
+        if (strcmp(agenda[i].nome, nome) == 0) {
+            int j;
+            for (j = i; j < numContatos - 1; j++) {
+                agenda[j] = agenda[j + 1];
+            }
+            numContatos--;
+            printf("Contato removido.\n");
+            return;
+        }
+    }
+
+    printf("Contato nao encontrado.\n");
+}
+
+void pesquisarContato() {
+    char nome[MAX_NOME];
+    printf("Digite o nome do contato a ser pesquisado: ");
+    scanf(" %[^\n]s", nome);
+
+    int i;
+    for (i = 0; i < numContatos; i++) {
+        if (strcmp(agenda[i].nome, nome) == 0) {
+            printf("Nome: %s\n", agenda[i].nome);
+            printf("Telefone: %s\n", agenda[i].telefone);
+            printf("Aniversario: %s\n", agenda[i].aniversario);
+            return;
+        }
+    }
+
+    printf("Contato nao encontrado.\n");
+}
+
+void listarContatos() {
+    int i;
+    for (i = 0; i < numContatos; i++) {
+        printf("Nome: %s\n", agenda[i].nome);
+        printf("Telefone: %s\n", agenda[i].telefone);
+        printf("Aniversario: %s\n", agenda[i].aniversario);
+        printf("-----------------\n");
+    }
+}
+
+void listarContatosPorLetra() {
+    char letra;
+    printf("Digite a letra inicial para filtrar os contatos: ");
+    scanf(" %c", &letra);
+
+    int i;
+    for (i = 0; i < numContatos; i++) {
+        if (agenda[i].nome[0] == letra) {
+            printf("Nome: %s\n", agenda[i].nome);
+            printf("Telefone: %s\n", agenda[i].telefone);
+            printf("Aniversario: %s\n", agenda[i].aniversario);
+            printf("-----------------\n");
+        }
+    }
+}
+
+void listarContatosPorAniversario() {
+    char aniversario[MAX_ANIVERSARIO];
+    printf("Digite a data de aniversario para filtrar os contatos: ");
+    scanf(" %[^\n]s", aniversario);
+
+    int i;
+    for (i = 0; i < numContatos; i++) {
+        if (strcmp(agenda[i].aniversario, aniversario) == 0) {
+            printf("Nome: %s\n", agenda[i].nome);
+            printf("Telefone: %s\n", agenda[i].telefone);
+            printf("Aniversario: %s\n", agenda[i].aniversario);
+            printf("-----------------\n");
+        }
+    }
+}
+
+void salvarContatos() {
+    FILE *arquivo = fopen(ARQUIVO_CONTATOS, "w");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo de contatos para escrita.\n");
+        return;
+    }
+
+    int i;
+    for (i = 0; i < numContatos; i++) {
+        fprintf(arquivo, "%s,%s,%s\n", agenda[i].nome, agenda[i].telefone, agenda[i].aniversario);
+    }
+
+    fclose(arquivo);
+}
+
+int main() {
+    carregarContatos();
+
+    int opcao;
+    do {
+        printf("---- Agenda de Contatos ----\n");
+        printf("1 - Adicionar Contato\n");
+        printf("2 - Remover Contato\n");
+        printf("3 - Pesquisar Contato\n");
+        printf("4 - Listar Todos os Contatos\n");
+        printf("5 - Listar Contatos por Letra Inicial\n");
+        printf("6 - Listar Contatos por Aniversario\n");
+        printf("0 - Sair\n");
+        printf("Digite a opcao desejada: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                adicionarContato();
+                break;
+            case 2:
+                removerContato();
+                break;
+            case 3:
+                pesquisarContato();
+                break;
+            case 4:
+                listarContatos();
+                break;
+            case 5:
+                listarContatosPorLetra();
+                break;
+            case 6:
+                listarContatosPorAniversario();
+                break;
+            case 0:
+                salvarContatos();
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opcao invalida.\n");
+        }
+    } while (opcao != 0);
+
+    return 0;
+}
+
+Output
+---
+
+---- Agenda de Contatos ----
+1 - Adicionar Contato
+2 - Remover Contato
+3 - Pesquisar Contato
+4 - Listar Todos os Contatos
+5 - Listar Contatos por Letra Inicial
+6 - Listar Contatos por Aniversario
+0 - Sair
+Digite a opcao desejada: 1
+Digite o nome: Artur 
+Digite o telefone: 999328951
+Digite o aniversario: 04/05
+---- Agenda de Contatos ----
+1 - Adicionar Contato
+2 - Remover Contato
+3 - Pesquisar Contato
+4 - Listar Todos os Contatos
+5 - Listar Contatos por Letra Inicial
+6 - Listar Contatos por Aniversario
+0 - Sair
+Digite a opcao desejada: 3
+Digite o nome do contato a ser pesquisado: Artur
+Nome: Artur
+Telefone: 999328951
+Aniversario: 04/05
+---- Agenda de Contatos ----
+1 - Adicionar Contato
+2 - Remover Contato
+3 - Pesquisar Contato
+4 - Listar Todos os Contatos
+5 - Listar Contatos por Letra Inicial
+6 - Listar Contatos por Aniversario
+0 - Sair
+Digite a opcao desejada: 3
+Digite o nome do contato a ser pesquisado: Bruno
+Contato nao encontrado.
+---- Agenda de Contatos ----
+1 - Adicionar Contato
+2 - Remover Contato
+3 - Pesquisar Contato
+4 - Listar Todos os Contatos
+5 - Listar Contatos por Letra Inicial
+6 - Listar Contatos por Aniversario
+0 - Sair
+Digite a opcao desejada: 4
+Nome: Artur
+Telefone: 999328951
+Aniversario: 04/05
+-----------------
+---- Agenda de Contatos ----
+1 - Adicionar Contato
+2 - Remover Contato
+3 - Pesquisar Contato
+4 - Listar Todos os Contatos
+5 - Listar Contatos por Letra Inicial
+6 - Listar Contatos por Aniversario
+0 - Sair
+Digite a opcao desejada: 1   
+Digite o nome: Tales
+Digite o telefone: 999328951
+Digite o aniversario: 05/05
+---- Agenda de Contatos ----
+1 - Adicionar Contato
+2 - Remover Contato
+3 - Pesquisar Contato
+4 - Listar Todos os Contatos
+5 - Listar Contatos por Letra Inicial
+6 - Listar Contatos por Aniversario
+0 - Sair
+Digite a opcao desejada: 4
+Nome: Artur
+Telefone: 999328951
+Aniversario: 04/05
+-----------------
+Nome: Tales
+Telefone: 999328951
+Aniversario: 05/05
+-----------------
+---- Agenda de Contatos ----
+1 - Adicionar Contato
+2 - Remover Contato
+3 - Pesquisar Contato
+4 - Listar Todos os Contatos
+5 - Listar Contatos por Letra Inicial
+6 - Listar Contatos por Aniversario
+0 - Sair
+Digite a opcao desejada: 5
+Digite a letra inicial para filtrar os contatos: A
+Nome: Artur
+Telefone: 999328951
+Aniversario: 04/05
+-----------------
+---- Agenda de Contatos ----
+1 - Adicionar Contato
+2 - Remover Contato
+3 - Pesquisar Contato
+4 - Listar Todos os Contatos
+5 - Listar Contatos por Letra Inicial
+6 - Listar Contatos por Aniversario
+0 - Sair
+Digite a opcao desejada: 5   
+Digite a letra inicial para filtrar os contatos: a
+---- Agenda de Contatos ----
+1 - Adicionar Contato
+2 - Remover Contato
+3 - Pesquisar Contato
+4 - Listar Todos os Contatos
+5 - Listar Contatos por Letra Inicial
+6 - Listar Contatos por Aniversario
+0 - Sair
+Digite a opcao desejada: 6   
+Digite a data de aniversario para filtrar os contatos: 04/05
+Nome: Artur
+Telefone: 999328951
+Aniversario: 04/05
+-----------------
+---- Agenda de Contatos ----
+1 - Adicionar Contato
+2 - Remover Contato
+3 - Pesquisar Contato
+4 - Listar Todos os Contatos
+5 - Listar Contatos por Letra Inicial
+6 - Listar Contatos por Aniversario
+0 - Sair
+Digite a opcao desejada: 0
+Saindo...
+
+
+###############
+# Exercício 2 #
+###############
+
+Código fonte
+---
+
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_CHARACTERS 50
+#define MAX_LINES 1000
+
+void reverseString(char* str) {
+    int length = strlen(str);
+    int i, j;
+    char temp;
+
+    for (i = 0, j = length - 1; i < j; i++, j--) {
+        temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+    }
+}
+
+int main() {
+    char inputFileName[100];
+    char outputFileName[100];
+
+    // Solicitar o nome dos arquivos de entrada e saída ao usuário
+    printf("Digite o nome do arquivo de entrada: ");
+    scanf("%s", inputFileName);
+    printf("Digite o nome do arquivo de saída: ");
+    scanf("%s", outputFileName);
+
+    // Abrir o arquivo de entrada para leitura
+    FILE* inputFile = fopen(inputFileName, "r");
+    if (inputFile == NULL) {
+        printf("Erro ao abrir o arquivo de entrada.\n");
+        return 1;
+    }
+
+    // Abrir o arquivo de saída para escrita
+    FILE* outputFile = fopen(outputFileName, "w");
+    if (outputFile == NULL) {
+        printf("Erro ao abrir o arquivo de saída.\n");
+        fclose(inputFile);
+        return 1;
+    }
+
+    char lines[MAX_LINES][MAX_CHARACTERS + 1];
+    int lineNumber = 0;
+
+    // Ler as linhas do arquivo de entrada
+    while (fgets(lines[lineNumber], sizeof(lines[lineNumber]), inputFile)) {
+        lineNumber++;
+
+        // Verificar se o número de linhas excede o limite
+        if (lineNumber >= MAX_LINES) {
+            printf("Erro: O número de linhas excede o limite permitido.\n");
+            fclose(inputFile);
+            fclose(outputFile);
+            return 1;
+        }
+    }
+
+    // Escrever as linhas invertidas no arquivo de saída
+    for (int i = lineNumber - 1; i >= 0; i--) {
+        reverseString(lines[i]);
+        fprintf(outputFile, "%s", lines[i]);
+    }
+
+    // Fechar os arquivos
+    fclose(inputFile);
+    fclose(outputFile);
+
+    printf("Processo concluído. O arquivo de saída foi gerado com sucesso.\n");
+
+    return 0;
+}
+
+Output
+---
+
+metta@metta-dell ~/git/prog2/lista9/2 (main) $ ./a.out 
+Digite o nome do arquivo de entrada: in.txt
+Digite o nome do arquivo de saída: out.txt
+Processo concluído. O arquivo de saída foi gerado com sucesso.
+metta@metta-dell ~/git/prog2/lista9/2 (main) $ cat out.txt 
+
+aton aob amu rarit uoV
+licaf otium atse avorp A
+1 pmoC ed avorp ed aid he ejoH
+
+
+###############
+# Exercício 3 #
+###############
+
+Código fonte
+---
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Struct para armazenar os dados do vendedor
+typedef struct {
+    int codigo_vendedor;
+    char nome_vendedor[50];
+    float valor_venda;
+    int mes_da_venda;
+} VENDEDOR;
+
+// Função para criar o arquivo de dados
+void criarArquivo() {
+    FILE *arquivo = fopen("vendedores", "wb");
+    if (arquivo == NULL) {
+        printf("Erro ao criar o arquivo.\n");
+        return;
+    }
+    fclose(arquivo);
+    printf("Arquivo criado com sucesso.\n");
+}
+
+// Função para incluir um registro no arquivo
+void incluirRegistro() {
+    VENDEDOR vendedor;
+    printf("Digite o código do vendedor: ");
+    scanf("%d", &vendedor.codigo_vendedor);
+
+    // Verifica se o registro já existe no arquivo
+    FILE *arquivo = fopen("vendedores", "rb");
+    if (arquivo != NULL) {
+        VENDEDOR temp;
+        while (fread(&temp, sizeof(VENDEDOR), 1, arquivo)) {
+            if (temp.codigo_vendedor == vendedor.codigo_vendedor) {
+                printf("Já existe um registro com esse código de vendedor.\n");
+                fclose(arquivo);
+                return;
+            }
+        }
+        fclose(arquivo);
+    }
+
+    printf("Digite o nome do vendedor: ");
+    scanf(" %[^\n]s", vendedor.nome_vendedor);
+    printf("Digite o valor da venda: ");
+    scanf("%f", &vendedor.valor_venda);
+    printf("Digite o mês da venda: ");
+    scanf("%d", &vendedor.mes_da_venda);
+
+    // Abre o arquivo no modo de escrita binária (append)
+    arquivo = fopen("vendedores", "ab");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+    fwrite(&vendedor, sizeof(VENDEDOR), 1, arquivo);
+    fclose(arquivo);
+    printf("Registro incluído com sucesso.\n");
+}
+
+// Função para excluir um registro do arquivo
+void excluirRegistro() {
+
+}
+
+// Função para alterar o valor de uma venda no arquivo
+void alterarValorVenda() {
+    int codigo;
+    printf("Digite o código do vendedor: ");
+    scanf("%d", &codigo);
+
+    FILE *arquivo = fopen("vendedores", "r+b");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    VENDEDOR vendedor;
+    int encontrado = 0;
+    while (fread(&vendedor, sizeof(VENDEDOR), 1, arquivo)) {
+        if (vendedor.codigo_vendedor == codigo) {
+            encontrado = 1;
+            break;
+        }
+    }
+
+    if (encontrado) {
+        float novo_valor;
+        printf("Digite o novo valor da venda: ");
+        scanf("%f", &novo_valor);
+        vendedor.valor_venda = novo_valor;
+        fseek(arquivo, -sizeof(VENDEDOR), SEEK_CUR);
+        fwrite(&vendedor, sizeof(VENDEDOR), 1, arquivo);
+        printf("Valor da venda alterado com sucesso.\n");
+    } else {
+        printf("Registro não encontrado.\n");
+    }
+
+    fclose(arquivo);
+}
+
+// Função para imprimir os registros na saída padrão
+void imprimirRegistros() {
+    FILE *arquivo = fopen("vendedores", "rb");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    VENDEDOR vendedor;
+    printf("Código\tNome\t\tValor Venda\tMês\n");
+    printf("------\t----\t\t-----------\t---\n");
+    while (fread(&vendedor, sizeof(VENDEDOR), 1, arquivo)) {
+        printf("%d\t%s\t%.2f\t\t%d\n", vendedor.codigo_vendedor, vendedor.nome_vendedor,
+               vendedor.valor_venda, vendedor.mes_da_venda);
+    }
+
+    fclose(arquivo);
+}
+
+// Função para excluir o arquivo de dados
+void excluirArquivo() {
+    int resultado = remove("vendedores");
+    if (resultado == 0) {
+        printf("Arquivo excluído com sucesso.\n");
+    } else {
+        printf("Erro ao excluir o arquivo.\n");
+    }
+}
+
+int main() {
+    int opcao;
+
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1 - Criar o arquivo de dados\n");
+        printf("2 - Incluir um registro no arquivo\n");
+        printf("3 - Excluir um vendedor no arquivo\n");
+        printf("4 - Alterar o valor de uma venda no arquivo\n");
+        printf("5 - Imprimir os registros\n");
+        printf("6 - Excluir o arquivo de dados\n");
+        printf("7 - Finalizar o programa\n");
+        printf("Digite a opção desejada: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                criarArquivo();
+                break;
+            case 2:
+                incluirRegistro();
+                break;
+            case 3:
+                // excluirRegistro();
+                break;
+            case 4:
+                alterarValorVenda();
+                break;
+            case 5:
+                imprimirRegistros();
+                break;
+            case 6:
+                excluirArquivo();
+                break;
+            case 7:
+                printf("Programa finalizado.\n");
+                return 0;
+            default:
+                printf("Opção inválida.\n");
+        }
+    }
+
+    return 0;
+}
+
+Output
+---
+
+Menu:
+1 - Criar o arquivo de dados
+2 - Incluir um registro no arquivo
+3 - Excluir um vendedor no arquivo
+4 - Alterar o valor de uma venda no arquivo
+5 - Imprimir os registros
+6 - Excluir o arquivo de dados
+7 - Finalizar o programa
+Digite a opção desejada: 5
+Código	Nome		Valor Venda	Mês
+------	----		-----------	---
+45	Artur	550.00		4
+
+Menu:
+1 - Criar o arquivo de dados
+2 - Incluir um registro no arquivo
+3 - Excluir um vendedor no arquivo
+4 - Alterar o valor de uma venda no arquivo
+5 - Imprimir os registros
+6 - Excluir o arquivo de dados
+7 - Finalizar o programa
+Digite a opção desejada: 2
+Digite o código do vendedor: 46
+Digite o nome do vendedor: Tales
+Digite o valor da venda: 400
+Digite o mês da venda: 5
+Registro incluído com sucesso.
+
+Menu:
+1 - Criar o arquivo de dados
+2 - Incluir um registro no arquivo
+3 - Excluir um vendedor no arquivo
+4 - Alterar o valor de uma venda no arquivo
+5 - Imprimir os registros
+6 - Excluir o arquivo de dados
+7 - Finalizar o programa
+Digite a opção desejada: 5
+Código	Nome		Valor Venda	Mês
+------	----		-----------	---
+45	Artur	550.00		4
+46	Tales	400.00		5
+
+Menu:
+1 - Criar o arquivo de dados
+2 - Incluir um registro no arquivo
+3 - Excluir um vendedor no arquivo
+4 - Alterar o valor de uma venda no arquivo
+5 - Imprimir os registros
+6 - Excluir o arquivo de dados
+7 - Finalizar o programa
+Digite a opção desejada: 4
+Digite o código do vendedor: 46
+Digite o novo valor da venda: 230
+Valor da venda alterado com sucesso.
+
+Menu:
+1 - Criar o arquivo de dados
+2 - Incluir um registro no arquivo
+3 - Excluir um vendedor no arquivo
+4 - Alterar o valor de uma venda no arquivo
+5 - Imprimir os registros
+6 - Excluir o arquivo de dados
+7 - Finalizar o programa
+Digite a opção desejada: 5
+Código	Nome		Valor Venda	Mês
+------	----		-----------	---
+45	Artur	550.00		4
+46	Tales	230.00		5
+
+
+
+###############
+# Exercício 4 #
+###############
+
+Código fonte
+---
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_LINE_LENGTH 1000
+
+int main() {
+    char inputFileName[100];
+    char pattern[100];
+
+    // Solicitar o nome do arquivo de entrada e o padrão ao usuário
+    printf("Digite o nome do arquivo de entrada: ");
+    scanf("%s", inputFileName);
+    printf("Digite o padrão a ser encontrado: ");
+    scanf("%s", pattern);
+
+    // Abrir o arquivo de entrada para leitura
+    FILE* inputFile = fopen(inputFileName, "r");
+    if (inputFile == NULL) {
+        printf("Erro ao abrir o arquivo de entrada.\n");
+        return 1;
+    }
+
+    char line[MAX_LINE_LENGTH];
+    int lineNumber = 0;
+    int patternFound = 0;
+
+    // Percorrer as linhas do arquivo de entrada
+    while (fgets(line, sizeof(line), inputFile)) {
+        lineNumber++;
+
+        // Verificar se o padrão ocorre na linha
+        if (strstr(line, pattern) != NULL) {
+            patternFound = 1;
+
+            // Exibir o número da linha e a linha encontrada
+            printf("Padrão encontrado na linha %d: %s", lineNumber, line);
+        }
+    }
+
+    // Verificar se o padrão não foi encontrado
+    if (!patternFound) {
+        printf("Padrão não encontrado no arquivo.\n");
+    }
+
+    // Fechar o arquivo de entrada
+    fclose(inputFile);
+
+    return 0;
+}
+
+Output
+---
+
+metta@metta-dell ~/git/prog2/lista9/4 (main) $ ./a.out 
+Digite o nome do arquivo de entrada: nomes.txt
+Digite o padrão a ser encontrado: Gabriel
+Padrão encontrado na linha 1: Maria Gabriela
+Padrão encontrado na linha 4: Gabriela Brum
+Padrão encontrado na linha 7: Gabriel Peroba
+metta@metta-dell ~/git/prog2/lista9/4 (main) $ ./a.out 
+Digite o nome do arquivo de entrada: nomes.txt
+Digite o padrão a ser encontrado: Gabriela
+Padrão encontrado na linha 1: Maria Gabriela
+Padrão encontrado na linha 4: Gabriela Brum
+metta@metta-dell ~/git/prog2/lista9/4 (main) $ ./a.out 
+Digite o nome do arquivo de entrada: nomes.txt
+Digite o padrão a ser encontrado: Lucca
+Padrão encontrado na linha 6: Lucca Gastro
+metta@metta-dell ~/git/prog2/lista9/4 (main) $ ./a.out 
+Digite o nome do arquivo de entrada: nomes.txt
+Digite o padrão a ser encontrado: Luc
+Padrão encontrado na linha 6: Lucca Gastro
+Padrão encontrado na linha 8: Lucas Silva
+
+
+
